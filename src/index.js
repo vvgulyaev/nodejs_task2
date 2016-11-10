@@ -48,6 +48,48 @@ app.get('/task2B', (req, res) => {
 	res.send(result_string);	
 });
 
+function find_nth_incoming(str, substr, n)
+{
+	var i = 0;
+	var count = 0;
+	var index = -1;
+	do {
+	    index = str.indexOf(substr,i);
+	    i = index + 1;
+	    count++;
+	} while ((index!=-1) && (count!=n))
+	return index;
+}
+
+app.get('/task2C', (req, res) => {
+	var username_string = req.query.username.toString().replace(/@/g,'');
+
+	var third_slash_index = find_nth_incoming(username_string, "/", 3);//username_string.lastIndexOf("/");
+	var last_slash_index = username_string.lastIndexOf("/");
+	var use_slash_index = (third_slash_index > 0) ? third_slash_index : last_slash_index;
+	
+	var fourth_slash_index = find_nth_incoming(username_string, "/", 4);
+	var question_symbol_index = username_string.lastIndexOf("?");
+	var username_finish_index = (fourth_slash_index>question_symbol_index) ? fourth_slash_index : question_symbol_index;
+
+	var result_string = '@';
+
+	if ((use_slash_index>0) && (username_finish_index>use_slash_index))
+	{
+		result_string += username_string.substring(use_slash_index+1, username_finish_index);
+	}
+	else if (use_slash_index>0)
+	{
+		result_string += username_string.substring(use_slash_index+1);		
+	}
+	else
+	{
+		result_string += username_string;
+	}
+
+	res.send(result_string);
+});
+
 
 app.listen(3000, () => {
   console.log('Your app listening on port 3000!');
