@@ -23,6 +23,8 @@ function remove_double_spaces(str)
 
 app.get('/task2B', (req, res) => {
 	var fullname = remove_double_spaces(req.query.fullname.toString());
+	fullname = fullname.replace(/^\s+/g, '');
+	fullname = fullname.toLowerCase();
 	var fullname_check;
 	var arr = fullname.split(" ", 4);
 	var len = arr.length;
@@ -32,6 +34,7 @@ app.get('/task2B', (req, res) => {
 	fullname_check = fullname.replace(/[0-9]/g, '');
 	fullname_check = fullname_check.replace("_", '');
 	fullname_check = fullname_check.replace("/", '');
+	console.log(fullname);
 	if ((len>3) || (arr[0].length==0) || (fullname != fullname_check))
 	{
 		result_string = "Invalid fullname";
@@ -39,9 +42,10 @@ app.get('/task2B', (req, res) => {
 	else
 	{
 		result_string = arr[len-1];
+		result_string = result_string.charAt(0).toUpperCase() + result_string.slice(1);
 		while (index<len-1)
 		{
-			result_string = result_string + ' ' + arr[index][0] + '.';
+			result_string = result_string + ' ' + arr[index].charAt(0).toUpperCase() + '.';
 			index++;
 		}
 	}
